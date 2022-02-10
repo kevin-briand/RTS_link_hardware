@@ -1,4 +1,3 @@
-// This sketch will pair a Somfy device with a virtual remote controller 
 
 #include <SomfyRTS.h>
 #include <EEPROM.h>
