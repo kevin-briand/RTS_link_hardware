@@ -1,5 +1,5 @@
 # RTS_Link
-RTS link for home assistant with an arduino nano and transceiver RFM69
+RTS link for home assistant with an arduino nano and transceiver RFM69HW
 
 Based on SomfyRTS library :
 https://github.com/etimou/SomfyRTS
