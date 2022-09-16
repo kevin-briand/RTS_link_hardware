@@ -9,6 +9,11 @@ https://github.com/etimou/SomfyRTS
 
 just a small program to link RTS shutters with home assistant(RFLINK integration)
 
+## Build
+-Arduino nano(MEGA328P)<br>
+-RFM69HW<br>
+-level shifter(5V to 3V3)
+
 ## first use :
 RESET : before starting on home assistant, send this command with Serial monitor.
 <br>
