@@ -10,10 +10,11 @@ int inc = 0;
 void setup() {
 
   Serial.begin(56700);
-  Serial.write("20;00;Somfy RTS link V1;");
+  Serial.write("20;00;Somfy RTS link V1.1;");
   myRTS.setHighPower(true); //have to call it after initialize for RFM69HW
 
   idCover = EEPROM.read(255);
+  Serial.write(String("Latest ID : " + String(idCover) + ";").c_str());
 }
 
 
