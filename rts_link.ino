@@ -9,7 +9,7 @@ int idCover = 10;
 int inc = 0;
 void setup() {
 
-  Serial.begin(56700);
+  Serial.begin(57600);
   Serial.write("20;00;Somfy RTS link V1.1;");
   myRTS.setHighPower(true); //have to call it after initialize for RFM69HW
 
