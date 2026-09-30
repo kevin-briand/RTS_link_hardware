@@ -46,24 +46,24 @@
   #define TRANSMIT_LOW(pin) (GPOC = 1<<pin)
 #else
   #define TRANSMIT_HIGH(pin) (PORTD |= 1<<pin)
-  #define TRANSMIT_LOW(pin) (PORTD &= !(1<<pin))
+  #define TRANSMIT_LOW(pin) (PORTD &= ~(1<<pin))
 #endif
 
 
 RFM69OOK radio;
 
-void SomfyRTS::initRadio() {
+bool SomfyRTS::initRadio() {
   pinMode(_pinTx, OUTPUT);
 
   if (_transmitterType == TSR_RFM69)
   {
-
-    radio.initialize();
+    if (!radio.initialize()) return false;
     radio.transmitBegin();
     //radio.setFrequencyMHz(868.88);
     radio.setFrequencyMHz(433.42);
     radio.setPowerLevel(20);
   }
+  return true;
 }
 
 void SomfyRTS::configRTS(unsigned int EEPROM_address, unsigned long RTS_address) {

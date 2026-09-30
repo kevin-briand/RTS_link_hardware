@@ -60,7 +60,11 @@ bool RFM69OOK::initialize()
 
   setHighPower(_isRFM69HW); // called regardless if it's a RFM69W or RFM69HW
   setMode(RF69OOK_MODE_STANDBY);
-    while ((readReg(REG_IRQFLAGS1) & RF_IRQFLAGS1_MODEREADY) == 0x00); // Wait for ModeReady
+  // Wait for ModeReady, give up if the radio does not answer (wiring, power...)
+  unsigned long start = millis();
+  while ((readReg(REG_IRQFLAGS1) & RF_IRQFLAGS1_MODEREADY) == 0x00) {
+    if (millis() - start > 100) return false;
+  }
 
   selfPointer = this;
   return true;

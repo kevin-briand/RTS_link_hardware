@@ -47,7 +47,7 @@
 
 class SomfyRTS {
   public:
-    void initRadio();
+    bool initRadio(); // call it from setup(), not before
     void sendSomfy(unsigned char virtualRemoteNumber, unsigned char actionCommand);
     void configRTS(unsigned int EEPROM_address, unsigned long RTS_address);
     void setHighPower(bool onOFF=true); //have to call it after initialize for RFM69HW
@@ -61,7 +61,8 @@ class SomfyRTS {
       _virtualRemoteNumber = 0;
       _transmitterType = transmitterType;
 
-      initRadio();
+      // initRadio() is not called here: global constructors run before the
+      // Arduino core and before the radio object itself is constructed
       #ifdef ESP8266
       EEPROM.begin(512);
       #endif
