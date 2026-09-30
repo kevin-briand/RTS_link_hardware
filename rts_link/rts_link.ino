@@ -11,7 +11,7 @@
 // Any invalid command answers "ERROR".
 
 // Uncomment to test the serial protocol without emitting anything on the radio
-//#define DRY_RUN
+// #define DRY_RUN
 
 SomfyRTS myRTS(3, TSR_RFM69); //Tx pin number, transmitter type
                               //pin number : pin connected to the transmitter DATA pin or to the DIO2 pin on RFM69
@@ -23,9 +23,17 @@ const int ID_ADDRESS = EEPROM.length() - 1;
 const int MAX_COVERS = 255;
 int idCover = 0;
 
+// Somfy motors need a silence between two transmissions, otherwise
+// back-to-back commands (grouped actions in HA) are ignored.
+const unsigned long MIN_GAP_MS = 500;
+unsigned long lastEmission = 0;
+
 void sendRadio(int id, byte cmd) {
 #ifndef DRY_RUN
+  unsigned long elapsed = millis() - lastEmission;
+  if (lastEmission != 0 && elapsed < MIN_GAP_MS) delay(MIN_GAP_MS - elapsed);
   myRTS.sendSomfy(id, cmd);
+  lastEmission = millis();
 #endif
 }
 
@@ -51,12 +59,15 @@ void reply(const String &msg) {
 void setup() {
   Serial.begin(115200);
   Serial.setTimeout(100); // only used if a line arrives without '\n'
-  //myRTS.setHighPower(true); //have to call it after initialize for RFM69HW
+
+  bool radioOk = myRTS.initRadio();
+  myRTS.setHighPower(true); //have to call it after initialize for RFM69HW
 
   idCover = EEPROM.read(ID_ADDRESS);
   if (idCover >= MAX_COVERS) idCover = 0; // erased/corrupted EEPROM reads 0xFF
 
   reply("Somfy RTS link");
+  if (!radioOk) reply("RADIO ERROR"); // RFM69 not answering: check wiring/power
 }
 
 void loop() {
