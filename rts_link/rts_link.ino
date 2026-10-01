@@ -25,7 +25,7 @@ int idCover = 0;
 
 // Somfy motors need a silence between two transmissions, otherwise
 // back-to-back commands (grouped actions in HA) are ignored.
-const unsigned long MIN_GAP_MS = 500;
+const unsigned long MIN_GAP_MS = 300;
 unsigned long lastEmission = 0;
 
 void sendRadio(int id, byte cmd) {
